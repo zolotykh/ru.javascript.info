@@ -5,37 +5,37 @@ libs:
 ---
 
 
-# Walking the DOM
+# Хождение по DOM
 
-The DOM allows us to do anything with elements and their contents, but first we need to reach the corresponding DOM object.
+DOM позволяет нам делать различные операции с элементами и их содержимым. Но для начала нам необходимо получить соответствующий DOM объект.
 
-All operations on the DOM start with the `document` object. From it we can access any node.
+Все операции с DOM начинаются с объекта `document`. Используя его мы можем получить доступ к любому узлу.
 
-Here's a picture of links that allow for travel between DOM nodes:
+На изображении ниже представлены связи, используя которые можно перемещаться между DOM узлами.
 
 ![](dom-links.png)
 
-Let's discuss them in more detail.
+Поговорим о них более подробно.
 
-## On top: documentElement and body
+## На самом верху: documentElement и body
 
-The topmost tree nodes are available directly as `document` properties:
+Самые верхние 3 узла доступны напрямую как свойства `document`.
 
 `<html>` = `document.documentElement`
-: The topmost document node is `document.documentElement`. That's DOM node of `<html>` tag.
+: Самый верхний узел документа - `document.documentElement`. Этот DOM узел представляет `<html>` тег.
 
 `<body>` = `document.body`
-: Another widely used DOM node is the `<body>` element -- `document.body`.
+: Другой широко используемый DOM узел это `<body>` элемент -- `document.body`.
 
 `<head>` = `document.head`
-: The `<head>` tag is available as `document.head`.
+: Тег `<head>` доступен как `document.head`.
 
-````warn header="There's a catch: `document.body` can be `null`"
-A script cannot access an element that doesn't exist at the moment of running.
+````warn header="Возможна проблема: `document.body` может быть `null`"
+Скрипт не может получить доступ к элементу, который не существует в момент выполнения кода.
 
-In particular, if a script is inside `<head>`, then `document.body` is unavailable, because the browser did not read it yet.
+Особенно, если скрипт расположен внутри тега `<head>`, тогда `document.body` не доступен, т.к. браузер ещё не обработал его.
 
-So, in the example below the first `alert` shows `null`:
+Таким образом, в примере ниже первый `alert` показывает `null`:
 
 ```html run
 <html>
@@ -43,7 +43,7 @@ So, in the example below the first `alert` shows `null`:
 <head>
   <script>
 *!*
-    alert( "From HEAD: " + document.body ); // null, there's no <body> yet
+    alert( "Из HEAD: " + document.body ); // null, Тега <body> ещё нет
 */!*
   </script>
 </head>
@@ -51,7 +51,7 @@ So, in the example below the first `alert` shows `null`:
 <body>
 
   <script>
-    alert( "From BODY: " + document.body ); // HTMLBodyElement, now it exists
+    alert( "Из BODY: " + document.body ); // HTMLBodyElement, теперь существует
   </script>
 
 </body>
@@ -59,49 +59,49 @@ So, in the example below the first `alert` shows `null`:
 ```
 ````
 
-```smart header="In the DOM world `null` means \"doesn't exist\""
-In the DOM, the `null` value means "doesn't exist" or "no such node".
+```smart header="В мире DOM `null` означает \"не существует\""
+В DOM, значение `null` означает "не существует" или "нет такого узоа".
 ```
 
-## Children: childNodes, firstChild, lastChild
+## Дочерние узлы: childNodes, firstChild, lastChild
 
-There are two terms that we'll use from now on:
+Два термина, которые мы будем теперь использовать:
 
-- **Child nodes (or children)** -- elements that are direct children. In other words, they are nested exactly in the given one. For instance, `<head>` and `<body>` are children of `<html>` element.
-- **Descendants** -- all elements that are nested in the given one, including children, their children and so on.
+- **Дочерние узлы (или children)** -- элементы, которые находятся следующими по уровню вложенности. Иными словами, они вложены прямо в данный узел. Для примера, `<head>` и `<body>` дочерние узлы `<html>` элемента.
+- **Потомки** -- все элементы, которые вложены в текущий, и могущие также содержать потомков.
 
-For instance, here `<body>` has children `<div>` and `<ul>` (and few blank text nodes):
+Для примера, здесь `<body>` имеет дочерние `<div>` и `<ul>` теги (и несколько пустых текстовых нод):
 
 ```html run
 <html>
 <body>
-  <div>Begin</div>
+  <div>Начало</div>
 
   <ul>
     <li>
-      <b>Information</b>
+      <b>Информация</b>
     </li>
   </ul>
 </body>
 </html>
 ```
 
-...And all descendants of `<body>` are not only direct children `<div>`, `<ul>` but also more deeply nested elements, such as `<li>` (a child of `<ul>`) and `<b>` (a child of `<li>`) -- the entire subtree.
+...И все потомки элемента `<body>` не только первые `<div>` и `<ul>` в уровне вложенности, но также и все остальные вложенные узлы, такие как `<li>` (дочерний узел от `<ul>`) и `<b>` (дочерний узел от `<li>`) -- целое поддерево.
 
-**The `childNodes` collection provides access to all child nodes, including text nodes.**
+**Свойство `childNodes` это коллекция предоставляющая доступ ко все вложенным узлам, включая текстовые.**
 
-The example below shows children of `document.body`:
+Пример ниже демонстрирует дочерние узлы от `document.body`:
 
 ```html run
 <html>
 <body>
-  <div>Begin</div>
+  <div>Начало</div>
 
   <ul>
-    <li>Information</li>
+    <li>Информация</li>
   </ul>
 
-  <div>End</div>
+  <div>Конец</div>
 
   <script>
 *!*
@@ -110,54 +110,54 @@ The example below shows children of `document.body`:
     }
 */!*
   </script>
-  ...more stuff...
+  ...ещё какая-то разметка...
 </body>
 </html>
 ```
 
-Please note an interesting detail here. If we run the example above, the last element shown is `<script>`. In fact, the document has more stuff below, but at the moment of the script execution the browser did not read it yet, so the script doesn't see it.
+Пожалуйста обратите внимание на интересную деталь. Если мы запустим пример выше, последний показанный элмент - `<script>`. По факту, документ может содержать больше узлов ниже, но в момент выполнения этого кода браузер ещё не обработал оставшуюся часть документа.
 
-**Properties `firstChild` and `lastChild` give fast access to the first and last children.**
+**Свойства `firstChild` и `lastChild` предоставляют простой способ как обратиться к первому и последнему дочернему узлу родительского элемента.**
 
-They are just shorthands. If there exist child nodes, then the following is always true:
+Они являются синонимами. Если у узла есть дочерние элементы, то строки ниже всегда вернут true:
 ```js
 elem.childNodes[0] === elem.firstChild
 elem.childNodes[elem.childNodes.length - 1] === elem.lastChild
 ```
 
-There's also a special function `elem.hasChildNodes()` to check whether there are any child nodes.
+Также есть специальная функция `elem.hasChildNodes()`  для проверки наличия дочерних элементов.
 
-### DOM collections
+### DOM коллекции
 
-As we can see, `childNodes` looks like an array. But actually it's not an array, but rather a *collection* -- a special array-like iterable object.
+Как мы можем видеть, `childNodes` выглядит подобно массиву. Но на самом деле это не массив, а скорее *collection* -- специальный массиво-подобный перечисляемый объект.
 
-There are two important consequences:
+Два важных заключения:
 
-1. We can use `for..of` to iterate over it:
+1. Мы можем использовать `for..of` для перебора коллекции:
   ```js
   for (let node of document.body.childNodes) {
-    alert(node); // shows all nodes from the collection
+    alert(node); // показывает все ноды коллекции
   }
   ```
-  That's because it's iterable (provides the `Symbol.iterator` property, as required).
+  Все потому что он перечисляемый (предоставляет свойство `Symbol.iterator`, как обязательное).
 
-2. Array methods won't work, because it's not an array:
+2. Методы массивы не будут работать, потому что это не массив:
   ```js run
-  alert(document.body.childNodes.filter); // undefined (there's no filter method!)
+  alert(document.body.childNodes.filter); // undefined (метода filter не существует!)
   ```
 
-The first thing is nice. The second is tolerable, because we can use `Array.from` to create a "real" array from the collection, if we want array methods:
+Первое заключение хорошо. Второе терпимо, потому что мы можем использовать `Array.from` для создания "настоящего" массива из коллекции, если нам нужны методы массива:
 
   ```js run
-  alert( Array.from(document.body.childNodes).filter ); // now it's there
+  alert( Array.from(document.body.childNodes).filter ); // теперь методы массива существуют
   ```
 
-```warn header="DOM collections are read-only"
-DOM collections, and even more -- *all* navigation properties listed in this chapter are read-only.
+```warn header="DOM коллекции доступны только для чтения"
+DOM коллекции, и даже больше -- *все* свойства навигации показанные в примерах главы доступны только для чтения.
 
-We can't replace a child by something else by assigning `childNodes[i] = ...`.
+мы не можем заменить дочерний элемент чем то ещё путём присваивания `childNodes[i] = ...`.
 
-Changing DOM needs other methods. We will see them in the next chapter.
+Изменение DOM требует других методов. Мы рассмотрим их в следующей главе.
 ```
 
 ```warn header="DOM collections are live"
